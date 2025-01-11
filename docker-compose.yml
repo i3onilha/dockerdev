@@ -24,6 +24,7 @@ services:
     depends_on:
       - mysql-dev
       - oracle-dev
+      - mongo
     networks:
       - backend
     ports:
@@ -46,7 +47,7 @@ services:
     container_name: mysql-dev
     restart: always
     volumes:
-      - /mysql-labels:/var/lib/mysql
+      - /mysql-db:/var/lib/mysql
     ports:
       - 3306:3306
     networks:
@@ -57,6 +58,18 @@ services:
       MYSQL_USER: default
       MYSQL_PASSWORD: secret
     platform: linux/amd64
+  mongo:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admincc
+      MONGO_INITDB_ROOT_PASSWORD: contoso9
+    volumes:
+      - /mongo_data:/data/db
+    networks:
+      - backend
 networks:
   backend:
     driver: bridge
